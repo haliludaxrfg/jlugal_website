@@ -417,6 +417,18 @@
             gap: 70px;
         }
 
+        .join-video {
+            display: block;
+            width: 100%;
+            max-height: 560px;
+            aspect-ratio: 16 / 9;
+            border: 6px solid rgba(255, 255, 255, .14);
+            border-radius: 20px;
+            background: #1b1640;
+            object-fit: contain;
+            box-shadow: var(--shadow);
+        }
+
         .join-section .eyebrow {
             color: #7ff5e6;
         }
@@ -512,8 +524,8 @@
 
         .qr-code {
             display: block;
-            width: 224px;
-            height: 224px;
+            width: 321px;
+            height: 570px;
             flex: 0 0 auto;
             border-radius: 8px;
             background: #202020;
@@ -683,6 +695,10 @@
                 gap: 34px;
             }
 
+            .join-video {
+                max-height: 420px;
+            }
+
             .join-section h2 {
                 font-size: 40px;
             }
@@ -778,16 +794,7 @@
             </section>
             <section class="section join-section" id="join">
                 <div class="section-inner join-grid">
-                    <div>
-                        <div class="eyebrow">READY WHEN YOU ARE</div>
-                        <h2>把“安迪？！”，<br>换成“Ciallo~”。</h2>
-                        <p>三步就能加入，不需要复杂操作。</p>
-                        <div class="steps">
-                            <div class="step"><span class="step-number">1</span><span>复制下方群号，打开手机 QQ</span></div>
-                            <div class="step"><span class="step-number">2</span><span>点击右上角加号，选择“加群”</span></div>
-                            <div class="step"><span class="step-number">3</span><span>搜索群号并提交申请，等待管理员通过</span></div>
-                        </div>
-                    </div>
+                    <video class="join-video" src="videos/lpluma.mp4" autoplay muted loop playsinline preload="auto"></video>
                     <div class="join-box"><small>QQ群号</small>
                         <div class="qq-number"><span id="qqNumber">795478875</span><button class="copy-btn"
                                 id="copyButton" type="button">复制</button></div>
