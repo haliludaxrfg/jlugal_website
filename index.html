@@ -560,6 +560,66 @@
             transform: translate(-50%, 0);
         }
 
+        .bgm-player {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 10px 13px 10px 10px;
+            border: 1px solid rgba(255, 255, 255, .28);
+            border-radius: 16px;
+            color: white;
+            background: rgba(35, 27, 75, .88);
+            box-shadow: 0 12px 34px rgba(38, 25, 90, .3);
+            backdrop-filter: blur(12px);
+        }
+
+        .bgm-toggle {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            color: #211c46;
+            background: var(--cyan);
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .bgm-toggle.is-playing {
+            background: var(--pink);
+        }
+
+        .bgm-info {
+            min-width: 92px;
+        }
+
+        .bgm-info strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .bgm-info small {
+            display: block;
+            max-width: 110px;
+            overflow: hidden;
+            color: rgba(255, 255, 255, .62);
+            font-size: 10px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .bgm-volume {
+            width: 76px;
+            accent-color: var(--cyan);
+            cursor: pointer;
+        }
+
         @media (max-width: 760px) {
 
             .nav,
@@ -629,6 +689,21 @@
 
             .qq-number {
                 font-size: 25px;
+            }
+
+            .bgm-player {
+                right: 14px;
+                bottom: 14px;
+                gap: 8px;
+                padding-right: 10px;
+            }
+
+            .bgm-info {
+                min-width: 76px;
+            }
+
+            .bgm-volume {
+                width: 62px;
             }
         }
     </style>
@@ -726,11 +801,53 @@
         </main>
         <footer>© 2026 吉大旮旯群 · 友善交流，分享成长</footer>
     </div>
+    <audio id="bgmAudio" src="bgm/忍%20-%20秋黴雨.mp3" loop preload="auto"></audio>
+    <div class="bgm-player" aria-label="背景音乐控制">
+        <button class="bgm-toggle" id="bgmToggle" type="button" aria-label="播放背景音乐">▶</button>
+        <div class="bgm-info"><strong>背景音乐</strong><small>忍 - 秋黴雨</small></div>
+        <input class="bgm-volume" id="bgmVolume" type="range" min="0" max="1" step="0.01" value="0.45" aria-label="调整音量" />
+    </div>
     <div class="toast" id="toast" role="status">群号已复制</div>
     <script>
         const copyButton = document.querySelector('#copyButton');
         const qqNumber = document.querySelector('#qqNumber').textContent;
         const toast = document.querySelector('#toast');
+        const bgmAudio = document.querySelector('#bgmAudio');
+        const bgmToggle = document.querySelector('#bgmToggle');
+        const bgmVolume = document.querySelector('#bgmVolume');
+
+        bgmAudio.volume = Number(bgmVolume.value);
+
+        const updateBgmButton = () => {
+            const isPlaying = !bgmAudio.paused;
+            bgmToggle.textContent = isPlaying ? '❚❚' : '▶';
+            bgmToggle.classList.toggle('is-playing', isPlaying);
+            bgmToggle.setAttribute('aria-label', isPlaying ? '暂停背景音乐' : '播放背景音乐');
+        };
+
+        const startBgmAfterInteraction = (event) => {
+            if (event.target.closest('.bgm-player')) {
+                return;
+            }
+            bgmAudio.play().then(updateBgmButton).catch(updateBgmButton);
+            document.removeEventListener('pointerdown', startBgmAfterInteraction);
+        };
+
+        document.addEventListener('pointerdown', startBgmAfterInteraction);
+        bgmToggle.addEventListener('click', () => {
+            if (bgmAudio.paused) {
+                bgmAudio.play().catch(() => {});
+            } else {
+                bgmAudio.pause();
+            }
+            updateBgmButton();
+        });
+        bgmVolume.addEventListener('input', () => {
+            bgmAudio.volume = Number(bgmVolume.value);
+        });
+        bgmAudio.addEventListener('play', updateBgmButton);
+        bgmAudio.addEventListener('pause', updateBgmButton);
+
         copyButton.addEventListener('click', async () => {
             try {
                 await navigator.clipboard.writeText(qqNumber);
