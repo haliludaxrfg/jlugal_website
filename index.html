@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="JLU-静月雪色Galgame同好会，吉林大学的 Galgame 同好群，群号 795478875。" />
+    <meta name="description" content="JLU-净月雪色Galgame同好会，吉林大学的 Galgame 同好群，群号 795478875。" />
     <meta name="theme-color" content="#1b1f42" />
-    <meta property="og:title" content="静月雪色 | JLU Galgame 同好会" />
+    <meta property="og:title" content="净月雪色 | JLU Galgame 同好会" />
     <meta property="og:description" content="F批？枕批？键批？月丑？每天都有新的真红坠机发生。群号 795478875。" />
     <meta property="og:type" content="website" />
-    <title>静月雪色 · JLU Galgame 同好会</title>
+    <title>净月雪色 · JLU Galgame 同好会</title>
     <link rel="preload" as="image" href="photos/background-1920.jpg" fetchpriority="high" />
     <style>
         :root {
@@ -548,7 +548,7 @@
         .bgm-bar {
             position: fixed;
             right: 18px;
-            bottom: 50px;
+            bottom: 18px;
             z-index: 30;
             display: grid;
             justify-items: center;
@@ -559,6 +559,14 @@
             box-shadow: 0 14px 34px rgba(8, 10, 26, .45);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
+            transition: opacity .25s var(--ease), visibility .25s, transform .25s var(--ease);
+        }
+
+        .bgm-bar[data-hidden="1"] {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(calc(100% + 18px));
         }
 
         .bgm-btn {
@@ -1029,7 +1037,7 @@
         </div>
 
         <div class="ts-head">
-            <h1 class="ts-logo"><b>静月雪色</b><span>吉林大学 Galgame 同好会</span></h1>
+            <h1 class="ts-logo"><b>净月雪色</b><span>吉林大学 Galgame 同好会</span></h1>
         </div>
 
         <div class="ts-body">
@@ -1128,7 +1136,7 @@
                 <p class="act-lead">把“安迪？！”换成“Ciallo～”。吉大在读、毕业、路过的同好都能进。</p>
                 <div class="save">
                     <div class="save-media">
-                        <img class="save-qr" src="photos/qrcode-900.jpg" alt="静月雪色 QQ 群二维码" loading="lazy" />
+                        <img class="save-qr" src="photos/qrcode-900.jpg" alt="净月雪色 QQ 群二维码" loading="lazy" />
                         <p class="save-qr-note">手机 QQ 扫码直接申请</p>
                     </div>
                     <div>
@@ -1151,7 +1159,7 @@
 
     <footer>
         <div class="foot-inner">
-            <span>© 2026 JLU-静月雪色Galgame同好会</span>
+            <span>© 2026 JLU-净月雪色Galgame同好会</span>
             <span><a href="#top">回到标题画面</a> · <a href="https://github.com/haliludaxrfg/jlugal_website"
                     target="_blank" rel="noopener noreferrer">项目链接</a></span>
         </div>
@@ -1247,10 +1255,20 @@
 
             /* 背景音乐 */
             var bgmAudio = document.getElementById('bgmAudio');
+            var bgmBar = document.querySelector('.bgm-bar');
             var bgmToggle = document.getElementById('bgmToggle');
             var bgmVolumeToggle = document.getElementById('bgmVolumeToggle');
             var bgmVolume = document.getElementById('bgmVolume');
             bgmAudio.volume = Number(bgmVolume.value);
+
+            function syncBgmPosition() {
+                var distanceToBottom = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+                bgmBar.dataset.hidden = distanceToBottom <= 8 ? '1' : '0';
+            }
+
+            window.addEventListener('scroll', syncBgmPosition, { passive: true });
+            window.addEventListener('resize', syncBgmPosition);
+            syncBgmPosition();
 
             bgmVolumeToggle.addEventListener('click', function () {
                 var isOpen = bgmVolumeToggle.getAttribute('aria-expanded') === 'true';
