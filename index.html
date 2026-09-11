@@ -372,9 +372,9 @@
 
         .scene-thumb {
             aspect-ratio: 3 / 2;
-            background-image: url("photos/background-1920.jpg");
-            background-size: 400% auto;
-            background-position: var(--x) 58%;
+            width: 100%;
+            object-fit: cover;
+            object-position: center top;
             border: 1px solid rgba(240, 215, 155, .8);
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .6);
         }
@@ -1048,21 +1048,21 @@
                 <p class="act-lead">人少则神人神，人多则神人多。</p>
                 <div class="scenes">
                     <article class="scene">
-                        <div class="scene-thumb" style="--x:0%" aria-hidden="true"></div>
+                        <img class="scene-thumb" src="photos/figure1.png" alt="旮旯直播场景" />
                         <div>
                             <h3>旮旯直播</h3>
                             <p>萝莉妈妈？青梅竹马？旮旯嘉豪？随手发电？开播了群里就一起看。</p>
                         </div>
                     </article>
                     <article class="scene">
-                        <div class="scene-thumb" style="--x:33.33%" aria-hidden="true"></div>
+                        <img class="scene-thumb" src="photos/figure2.png" alt="线虫聚会场景" />
                         <div>
                             <h3>线虫聚会</h3>
                             <p>每个神必假期、开学、毕业都可能凑一场，是群里主要的线下活动。</p>
                         </div>
                     </article>
                     <article class="scene">
-                        <div class="scene-thumb" style="--x:100%" aria-hidden="true"></div>
+                        <img class="scene-thumb" src="photos/figure3.jpg" alt="神必南梁场景" />
                         <div>
                             <h3>神必南梁</h3>
                             <p>嘻嘻嘻，嘻嘻嘻，馋人不给 C，真是烦死了喵。</p>
@@ -1075,7 +1075,7 @@
         <section class="act act-night" id="movie">
             <div class="act-inner">
                 <h2 class="act-title">回想</h2>
-                <p class="act-lead">毕业不是结束，下一段故事也欢迎在群里继续。</p>
+                <p class="act-lead">本群的神人小视频</p>
                 <div class="movies">
                     <figure class="movie">
                         <div class="movie-frame">
