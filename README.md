@@ -11,3 +11,9 @@ bgm:忍 - 秋黴雨 （星空的记忆）
 人像3:pid:122295004
 视频1:BV1yo7L6cETS
 
+相片库维护
+-----------
+
+相片文件放在 `photos/gallery1`、`photos/gallery2`、`photos/gallery3` 中，分别对应三个模块。
+增删或改名图片后，只需同步修改 `gallery-data.js` 中对应相册的 `files` 列表；`title` 可修改相册标题。
+

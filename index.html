@@ -395,6 +395,31 @@
             font-size: 14.5px;
         }
 
+        .gallery-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 8px 14px;
+            border: 1px solid rgba(42, 43, 82, .28);
+            background: transparent;
+            color: var(--on-snow);
+            cursor: pointer;
+            font-size: 13px;
+            letter-spacing: .06em;
+            transition: background .25s, border-color .25s, color .25s, transform .15s var(--ease);
+        }
+
+        .gallery-btn::before {
+            content: "▧";
+            color: var(--sakura);
+            font-size: 15px;
+        }
+
+        .gallery-btn:active {
+            transform: scale(.97);
+        }
+
         @media (min-width: 901px) {
             .scenes {
                 grid-template-columns: repeat(3, 1fr);
@@ -793,6 +818,87 @@
             transform: translate(-50%, 0);
         }
 
+        .gallery-dialog {
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            background: rgba(20, 23, 51, .72);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .25s, visibility .25s;
+        }
+
+        .gallery-dialog[data-open="1"] {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .gallery-panel {
+            position: relative;
+            width: min(100%, 860px);
+            max-height: min(90svh, 760px);
+            overflow: auto;
+            padding: 34px clamp(18px, 4vw, 42px) 38px;
+            background: var(--snow);
+            color: var(--on-snow);
+            border: 1px solid rgba(240, 215, 155, .7);
+            box-shadow: 0 24px 70px rgba(8, 10, 26, .42);
+            transform: translateY(12px);
+            transition: transform .3s var(--ease);
+        }
+
+        .gallery-dialog[data-open="1"] .gallery-panel {
+            transform: translateY(0);
+        }
+
+        .gallery-panel h2 {
+            margin: 0 0 10px;
+            font-family: var(--mincho);
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: .14em;
+        }
+
+        .gallery-panel p {
+            margin: 0 0 22px;
+            color: var(--on-snow-dim);
+            font-size: 14px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            background: var(--night-deep);
+            border: 1px solid rgba(42, 43, 82, .15);
+            cursor: zoom-in;
+        }
+
+        .gallery-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border: 0;
+            background: transparent;
+            color: var(--on-snow-dim);
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+        }
+
         /* =========================================================
            hover 只在真正有指针的设备上生效
            ========================================================= */
@@ -828,6 +934,66 @@
                 background: var(--night);
                 border-color: var(--night);
                 color: var(--snow);
+            }
+
+            .gallery-btn:hover {
+                background: var(--night);
+                border-color: var(--night);
+                color: var(--snow);
+            }
+
+            .gallery-close:hover {
+                color: var(--on-snow);
+            }
+
+            .image-viewer {
+                position: fixed;
+                inset: 0;
+                z-index: 50;
+                display: grid;
+                place-items: center;
+                padding: 54px 24px 24px;
+                background: rgba(8, 10, 26, .9);
+                overflow: hidden;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: opacity .25s, visibility .25s;
+            }
+
+            .image-viewer[data-open="1"] {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+            }
+
+            .image-viewer img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                box-shadow: 0 18px 60px rgba(0, 0, 0, .5);
+                cursor: grab;
+                transform: translate3d(0, 0, 0) scale(1);
+                transform-origin: center;
+                user-select: none;
+            }
+
+            .image-viewer img:active {
+                cursor: grabbing;
+            }
+
+            .image-viewer-close {
+                position: absolute;
+                top: 14px;
+                right: 18px;
+                width: 38px;
+                height: 38px;
+                border: 1px solid rgba(246, 243, 251, .5);
+                background: transparent;
+                color: var(--snow);
+                cursor: pointer;
+                font-size: 26px;
+                line-height: 1;
             }
 
             .foot-inner a:hover {
@@ -1073,6 +1239,7 @@
                         <div>
                             <h3>旮旯直播</h3>
                             <p>萝莉妈妈？青梅竹马？旮旯嘉豪？随手发电？开播了群里就一起看。</p>
+                                    <button class="gallery-btn" data-gallery-id="gallery1" type="button">查看相片</button>
                         </div>
                     </article>
                     <article class="scene">
@@ -1080,6 +1247,7 @@
                         <div>
                             <h3>线虫聚会</h3>
                             <p>每个神必假期、开学、毕业都可能凑一场，是群里主要的线下活动。</p>
+                                    <button class="gallery-btn" data-gallery-id="gallery2" type="button">查看相片</button>
                         </div>
                     </article>
                     <article class="scene">
@@ -1087,6 +1255,7 @@
                         <div>
                             <h3>神必南梁</h3>
                             <p>嘻嘻嘻，嘻嘻嘻，馋人不给 C，真是烦死了喵。</p>
+                                    <button class="gallery-btn" data-gallery-id="gallery3" type="button">查看相片</button>
                         </div>
                     </article>
                 </div>
@@ -1177,6 +1346,23 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite">群号已复制</div>
 
+    <div class="gallery-dialog" id="galleryDialog" data-open="0" role="dialog" aria-modal="true"
+        aria-labelledby="galleryTitle">
+        <div class="gallery-panel">
+            <button class="gallery-close" id="galleryClose" type="button" aria-label="关闭相片库">×</button>
+            <h2 id="galleryTitle">相片库</h2>
+            <p id="galleryMessage"></p>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+    </div>
+
+    <div class="image-viewer" id="imageViewer" data-open="0" role="dialog" aria-modal="true"
+        aria-label="放大查看相片">
+        <button class="image-viewer-close" id="imageViewerClose" type="button" aria-label="关闭大图">×</button>
+        <img id="imageViewerImage" alt="" />
+    </div>
+
+    <script src="gallery-data.js"></script>
     <script>
         (function () {
             'use strict';
@@ -1193,6 +1379,98 @@
                 clearTimeout(toastTimer);
                 toastTimer = setTimeout(function () { toast.dataset.show = '0'; }, 2000);
             }
+
+            /* 相片库先保留入口，待图片素材补齐后替换占位内容。 */
+            var galleryDialog = document.getElementById('galleryDialog');
+            var galleryTitle = document.getElementById('galleryTitle');
+            var galleryMessage = document.getElementById('galleryMessage');
+            var galleryGrid = document.getElementById('galleryGrid');
+            var galleryClose = document.getElementById('galleryClose');
+            var imageViewer = document.getElementById('imageViewer');
+            var imageViewerImage = document.getElementById('imageViewerImage');
+            var imageViewerClose = document.getElementById('imageViewerClose');
+            var imageScale = 1;
+            var imageOffsetX = 0;
+            var imageOffsetY = 0;
+
+            function syncImageTransform() {
+                imageViewerImage.style.transform = 'translate3d(' + imageOffsetX + 'px, ' + imageOffsetY + 'px, 0) scale(' + imageScale + ')';
+            }
+
+            function resetImageTransform() {
+                imageScale = 1;
+                imageOffsetX = 0;
+                imageOffsetY = 0;
+                syncImageTransform();
+            }
+
+            function closeGallery() {
+                galleryDialog.dataset.open = '0';
+            }
+
+            function closeImageViewer() {
+                imageViewer.dataset.open = '0';
+                imageViewerImage.removeAttribute('src');
+                resetImageTransform();
+            }
+
+            Array.prototype.forEach.call(document.querySelectorAll('.gallery-btn'), function (button) {
+                button.addEventListener('click', function () {
+                    var galleryId = button.dataset.galleryId;
+                    var gallery = window.galleryData[galleryId];
+                    galleryTitle.textContent = gallery.title + ' · 相片库';
+                    galleryMessage.textContent = gallery.files.length + ' 张相片';
+                    galleryGrid.replaceChildren();
+                    gallery.files.forEach(function (fileName) {
+                        var image = document.createElement('img');
+                        image.src = 'photos/' + galleryId + '/' + encodeURIComponent(fileName);
+                        image.alt = gallery.title + '相片';
+                        image.loading = 'lazy';
+                        image.addEventListener('dblclick', function () {
+                            resetImageTransform();
+                            imageViewerImage.src = image.src;
+                            imageViewerImage.alt = image.alt;
+                            imageViewer.dataset.open = '1';
+                            imageViewerClose.focus();
+                        });
+                        galleryGrid.appendChild(image);
+                    });
+                    galleryDialog.dataset.open = '1';
+                    galleryClose.focus();
+                });
+            });
+
+            galleryClose.addEventListener('click', closeGallery);
+            imageViewerClose.addEventListener('click', closeImageViewer);
+            imageViewer.addEventListener('wheel', function (event) {
+                event.preventDefault();
+                var distance = Math.max(-80, Math.min(80, event.deltaY));
+                if (event.ctrlKey) {
+                    imageScale = Math.max(.5, Math.min(4, imageScale * (distance < 0 ? 1.1 : .9)));
+                } else if (event.shiftKey) {
+                    imageOffsetX -= distance;
+                } else {
+                    imageOffsetY -= distance;
+                }
+                syncImageTransform();
+            }, { passive: false });
+            imageViewer.addEventListener('click', function (event) {
+                if (event.target === imageViewer) {
+                    closeImageViewer();
+                }
+            });
+            galleryDialog.addEventListener('click', function (event) {
+                if (event.target === galleryDialog) {
+                    closeGallery();
+                }
+            });
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && imageViewer.dataset.open === '1') {
+                    closeImageViewer();
+                } else if (event.key === 'Escape' && galleryDialog.dataset.open === '1') {
+                    closeGallery();
+                }
+            });
 
             function legacyCopy(text) {
                 var field = document.createElement('textarea');
