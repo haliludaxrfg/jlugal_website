@@ -976,6 +976,8 @@
                 transform: translate3d(0, 0, 0) scale(1);
                 transform-origin: center;
                 user-select: none;
+                touch-action: none;
+                -webkit-user-drag: none;
             }
 
             .image-viewer img:active {
@@ -1392,6 +1394,12 @@
             var imageScale = 1;
             var imageOffsetX = 0;
             var imageOffsetY = 0;
+            var touchStartX = 0;
+            var touchStartY = 0;
+            var touchStartOffsetX = 0;
+            var touchStartOffsetY = 0;
+            var pinchStartDistance = 0;
+            var pinchStartScale = 1;
 
             function syncImageTransform() {
                 imageViewerImage.style.transform = 'translate3d(' + imageOffsetX + 'px, ' + imageOffsetY + 'px, 0) scale(' + imageScale + ')';
@@ -1442,6 +1450,44 @@
 
             galleryClose.addEventListener('click', closeGallery);
             imageViewerClose.addEventListener('click', closeImageViewer);
+            imageViewerImage.addEventListener('touchstart', function (event) {
+                if (event.touches.length === 2) {
+                    var firstTouch = event.touches[0];
+                    var secondTouch = event.touches[1];
+                    pinchStartDistance = Math.hypot(
+                        secondTouch.clientX - firstTouch.clientX,
+                        secondTouch.clientY - firstTouch.clientY
+                    );
+                    pinchStartScale = imageScale;
+                } else if (event.touches.length === 1) {
+                    touchStartX = event.touches[0].clientX;
+                    touchStartY = event.touches[0].clientY;
+                    touchStartOffsetX = imageOffsetX;
+                    touchStartOffsetY = imageOffsetY;
+                }
+            }, { passive: false });
+            imageViewerImage.addEventListener('touchmove', function (event) {
+                event.preventDefault();
+                if (event.touches.length === 2 && pinchStartDistance) {
+                    var firstTouch = event.touches[0];
+                    var secondTouch = event.touches[1];
+                    var currentDistance = Math.hypot(
+                        secondTouch.clientX - firstTouch.clientX,
+                        secondTouch.clientY - firstTouch.clientY
+                    );
+                    imageScale = Math.max(.5, Math.min(4, pinchStartScale * currentDistance / pinchStartDistance));
+                    syncImageTransform();
+                } else if (event.touches.length === 1) {
+                    imageOffsetX = touchStartOffsetX + event.touches[0].clientX - touchStartX;
+                    imageOffsetY = touchStartOffsetY + event.touches[0].clientY - touchStartY;
+                    syncImageTransform();
+                }
+            }, { passive: false });
+            imageViewerImage.addEventListener('touchend', function (event) {
+                if (event.touches.length < 2) {
+                    pinchStartDistance = 0;
+                }
+            }, { passive: false });
             imageViewer.addEventListener('wheel', function (event) {
                 event.preventDefault();
                 var distance = Math.max(-80, Math.min(80, event.deltaY));
