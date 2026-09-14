@@ -15,5 +15,6 @@ bgm:忍 - 秋黴雨 （星空的记忆）
 -----------
 
 相片文件放在 `photos/gallery1`、`photos/gallery2`、`photos/gallery3` 中，分别对应三个模块。
-增删或改名图片后，只需同步修改 `gallery-data.js` 中对应相册的 `files` 列表；`title` 可修改相册标题。
+增删或改名图片后，在项目目录运行 `./refresh-galleries.ps1`，脚本会自动扫描三个目录并更新 `gallery-data.js`，不需要手动修改图片清单。
+脚本只会读取 `.jpg`、`.jpeg`、`.png`、`.webp`、`.gif` 文件；相册标题仍可在脚本顶部的 `$galleryTitles` 中修改。
 
